@@ -2,7 +2,7 @@
 
 # script to run on Beagle Bone ROS 
 
-ifup -v wlan1
+#ifup -v wlan1
 
 #register beagle bone ip
  
