@@ -1,0 +1,27 @@
+export ROS_IP=192.168.1.12
+export ROS_IP=192.168.1.9
+export ROS_MASTER_URI=http://$ROS_IP:11311
+
+export ROS_MASTER_URI=http://lazarus:11311
+
+roscore
+
+
+source ~/catkin_ws/mycpp/devel/setup.bash
+roslaunch vicon_bridge vicon.launch
+
+source ~/catkin_ws/myandroid/devel/setup.bash
+ cd ~/catkin_ws/myandroid/src/scripts
+python adf_calibration.py
+
+
+
+source ~/catkin_ws/myandroid/devel/setup.bash
+cd ~/catkin_ws/myandroid/src/scripts$ 
+python tango_listener.py 
+
+
+
+rostopic echo /vicon/TangoJuly24/mainBody 
+rostopic echo /tango_pose_adf_device/translation
+
