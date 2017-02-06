@@ -5,6 +5,7 @@ from bb_open_wearable_ros.msg import FsrDataMsg
 import Adafruit_BBIO.ADC as ADC
 import Adafruit_BBIO.GPIO as GPIO
 import Adafruit_BBIO.PWM as PWM
+from time import sleep
 
 import numpy as np
 
@@ -22,11 +23,11 @@ def pin_setup():
 
     #falling edge detect for vicon sync pin
     GPIO.setup(vicon_sync_pin, GPIO.IN)
-    GPIO.add_event_detect(vicon_sync_pin, GPIO.FALLING)
-    GPIO.add_event_detect(vicon_sync_pin, GPIO.RISING)
+    GPIO.add_event_detect(vicon_sync_pin, GPIO.BOTH)
+  #  GPIO.add_event_detect(vicon_sync_pin, GPIO.RISING)
     
     # mux select to be out .. May need  to be PWM
-    #GPIO.setup(mux_sel_pin, GPIO.OUT)
+    GPIO.setup(mux_sel_pin, GPIO.OUT)
 
     #ADC set up
     ADC.setup()
@@ -40,6 +41,8 @@ def fsr_ADC_read():
     fsr_vals[0]=ADC.read("AIN2")
     fsr_vals[1]=ADC.read("AIN3")
     fsr_vals[2]=ADC.read("AIN4")
+    
+    sleep(0.250) #wait 250ms
     
     GPIO.output(mux_sel_pin,GPIO.LOW)
     fsr_vals[3]=ADC.read("AIN2")

@@ -1,3 +1,5 @@
+.gitignore
+
 /myandroid/install/
 /myandroid/devel/
 /myandroid/build
