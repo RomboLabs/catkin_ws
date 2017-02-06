@@ -4,6 +4,8 @@ from std_msgs.msg import String
 from bb_open_wearable_ros.msg import FsrDataMsg
 import Adafruit_BBIO.ADC as ADC
 import Adafruit_BBIO.GPIO as GPIO
+import Adafruit_BBIO.PWM as PWM
+
 import numpy as np
 
 mux_sel_pin = "P9_25"
@@ -11,6 +13,8 @@ vicon_sync_pin="P9_24"
 num_fsr_channels=6;
 pub_freq=60;
 bSync=False
+
+mux_freq= '250' 
 # Sensor connected to P9_40
 
 def pin_setup():
@@ -19,9 +23,10 @@ def pin_setup():
     #falling edge detect for vicon sync pin
     GPIO.setup(vicon_sync_pin, GPIO.IN)
     GPIO.add_event_detect(vicon_sync_pin, GPIO.FALLING)
-
+    GPIO.add_event_detect(vicon_sync_pin, GPIO.RISING)
+    
     # mux select to be out .. May need  to be PWM
-    GPIO.setup(mux_sel_pin, GPIO.OUT)
+    #GPIO.setup(mux_sel_pin, GPIO.OUT)
 
     #ADC set up
     ADC.setup()
@@ -30,10 +35,16 @@ def fsr_ADC_read():
     global num_fsr_channels
     fsr_vals=np.zeros(num_fsr_channels)
 
+    GPIO.output(mux_sel_pin,GPIO.HIGH)
     # FSR is muxed only into 3 AI inputs 2,3,4
     fsr_vals[0]=ADC.read("AIN2")
     fsr_vals[1]=ADC.read("AIN3")
-    fsr_vals[3]=ADC.read("AIN3")
+    fsr_vals[2]=ADC.read("AIN4")
+    
+    GPIO.output(mux_sel_pin,GPIO.LOW)
+    fsr_vals[3]=ADC.read("AIN2")
+    fsr_vals[4]=ADC.read("AIN3")
+    fsr_vals[5]=ADC.read("AIN4")
 
     return fsr_vals
 
@@ -53,15 +64,21 @@ def run_node():
     while not rospy.is_shutdown():
 
         #set mux_sel to high for testing
-        GPIO.output(mux_sel_pin,GPIO.HIGH)
-
+        #GPIO.output(mux_sel_pin,GPIO.HIGH)
+        #PWM.start(channel, duty, freq=2000, polarity=0)
+        #PWM.start(mux_sel_pin, 50, mux_freq, 0)
 
         # vicon status will be triggered by sync pin falling edge
         if GPIO.event_detected(vicon_sync_pin) and bSync == False:
           rospy.loginfo("Sync detected")
           FsrDataMsg_1.vicon_Status= 1;
           bSync=True
-
+        
+        if GPIO.event_detected(vicon_sync_pin) and bSync == True:
+          rospy.loginfo("Sync de -Triggered")
+          FsrDataMsg_1.vicon_Status= 0;
+          bSync=False
+          
         # read ADC inputs   
         FsrDataMsg_1.fsr_vals=fsr_ADC_read()
 
