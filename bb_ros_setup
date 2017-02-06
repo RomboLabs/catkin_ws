@@ -1,0 +1,11 @@
+#!/bin/bash
+
+# script to run on Beagle Bone ROS 
+
+ifup -v wlan1
+
+#register beagle bone ip
+ 
+export ROS_IP=192.168.1.12
+export ROS_MASTER_URI=http://lazarus:11311
+

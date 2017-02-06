@@ -1,0 +1,7 @@
+#!/bin/bash
+
+
+ 
+export ROS_IP=192.168.1.6
+export ROS_MASTER_URI=http://lazarus:11311
+
