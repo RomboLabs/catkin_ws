@@ -63,7 +63,7 @@ def run_node():
     
     
     FsrDataMsg_1=FsrDataMsg()
-
+    FsrDataMsg_1.frame_id='beaglebone'
     while not rospy.is_shutdown():
 
         #set mux_sel to high for testing
@@ -89,6 +89,7 @@ def run_node():
         sent_msg = "Vicon: %s  FSR: %s %s %s " % (FsrDataMsg_1.vicon_Status, FsrDataMsg_1.fsr_vals[0], FsrDataMsg_1.fsr_vals[1],FsrDataMsg_1.fsr_vals[2])
         rospy.loginfo(sent_msg)
         
+        FsrDataMsg_1.header.stamp = rospy.Time.now()
         pub.publish(FsrDataMsg_1)
         #rospy.sleep(1.0)
         r.sleep()
