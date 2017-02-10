@@ -63,7 +63,7 @@ def run_node():
     
     
     FsrDataMsg_1=FsrDataMsg()
-    FsrDataMsg_1.frame_id='beaglebone'
+    FsrDataMsg_1.header.frame_id='beaglebone'
     while not rospy.is_shutdown():
 
         #set mux_sel to high for testing
