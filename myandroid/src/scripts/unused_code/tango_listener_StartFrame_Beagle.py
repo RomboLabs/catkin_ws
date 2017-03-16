@@ -25,14 +25,13 @@ vicon_counter=0;
 mustAnnotate = True;
 
 vicon_pose_topic='/vicon/tango7/mainBody'
-tango_topic='/tf'
-#tango_topic='tango_start_frame'
+tango_topic='tango_start_frame'
 beagle_topic='/bb_fsr'
 
 
 
          
-def sync_start_vicon_beagle_callback(tango_pose_start_device):
+def sync_start_vicon_beagle_callback(tango_pose_start_device,bb_fsr):
      
          global tango_counter;
          global vicon_counter;
@@ -40,8 +39,8 @@ def sync_start_vicon_beagle_callback(tango_pose_start_device):
 
          
          print ' Relocalized...synced and saving start and adf -- Subject Name',subjectName;
-         
-           
+         print "tango",tango_pose_start_device.header.stamp.secs,tango_pose_start_device.header.stamp.nsecs;
+         print "tango",bb_fsr.header.stamp.secs,bb_fsr.header.stamp.nsecs;  
 
 def listener():
     global mydir;
@@ -65,33 +64,21 @@ def listener():
 
     rospy.init_node('listener', anonymous=True)
 
-#    tfBuffer = tf2_ros.Buffer()
-#    listener = tf2_ros.TransformListener(tfBuffer)
-#    
-#    while not rospy.is_shutdown():
-#        try:
-#            trans = tfBuffer.lookup_transform('device', 'start_of_service', rospy.Time(0))
-#        except (tf2_ros.LookupException, tf2_ros.ConnectivityException, tf2_ros.ExtrapolationException):
-#            rate.sleep()
-#            continue
-        
-
      # message filter subsribers 
     # @todo tf based message filter
+    #fs, queue_size, slop)¶
     tango_sub_start= message_filters.Subscriber(tango_topic, TransformStamped) #start to device 
     #vicon_sub= message_filters.Subscriber(vicon_pose_topic,TransformStamped )  # Vicon pose est 
     beagle_sub= message_filters.Subscriber(beagle_topic,FsrDataMsg )
 
 
     #message filter sync params
-    ts_ = message_filters.ApproximateTimeSynchronizer([tango_sub_start,beagle_sub], 5,40)
+    ts_ = message_filters.ApproximateTimeSynchronizer([tango_sub_start,beagle_sub], 10,1)
 
 
     #message filter callbacks 
-    #ts_.registerCallback(sync_start_vicon_beagle_callback)
+    ts_.registerCallback(sync_start_vicon_beagle_callback)
 
-    #rospy.Subscriber(tango_topic, TransformStamped, sync_start_vicon_beagle_callback)
-   # rospy.Subscriber(beagle_topic, TransformStamped, sync_start_vicon_beagle_callback)
     
     rospy.loginfo("listening to Start and Vicon");
     rospy.spin()

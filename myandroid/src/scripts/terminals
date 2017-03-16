@@ -25,3 +25,5 @@ python tango_listener.py
 rostopic echo /vicon/TangoJuly24/mainBody 
 rostopic echo /tango_pose_adf_device/translation
 
+source ~/catkin_ws/mypy/devel/setup.bash 
+
