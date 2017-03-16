@@ -7,3 +7,7 @@
 /mypy/install/
 /mypy/devel/
 /mypy/build/
+
+/mypy/.catkin_workspace
+/mypy/src/CMakeLists.txt
+
