@@ -4,4 +4,17 @@
  
 export ROS_IP=192.168.1.6
 export ROS_MASTER_URI=http://lazarus:11311
+roscore
 
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+source ~/catkin_ws/mypy/devel/setup.bash
+python ~/catkin_ws/myandroid/src/scripts/tf_regurgitator.py 
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+source ~/catkin_ws/mypy/devel/setup.bash
+python ~/catkin_ws/myandroid/src/scripts/tango_listener_StartFrame_Beagle.py
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~``
+source ~/catkin_ws/mypy/devel/setup.bash
+rostopic echo /bb_fsr 

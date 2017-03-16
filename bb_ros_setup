@@ -2,10 +2,17 @@
 
 # script to run on Beagle Bone ROS 
 
-ifup -v wlan1
+#ifup -v wlan1
 
 #register beagle bone ip
  
 export ROS_IP=192.168.1.12
 export ROS_MASTER_URI=http://lazarus:11311
+export ROS_MASTER_URI=http://BamBam:1311
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+python /media/sdcard/catkin_ws/mypy/src/bb_open_wearable_ros/scripts/fsr_vicon.py
+# source devel/setup.bash 
+		
 
